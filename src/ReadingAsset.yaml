@@ -1,0 +1,113 @@
+swagger: "2.0"
+
+info:
+  description: "The readingAsset chaincode can read/write vehicle odometer readings
+    onto the blockchain and can expose these functions as REST API.
+    THIS SAMPLE CODE MAY BE USED SOLELY AS PART OF THE TEST AND EVALUATION OF THE SAP CLOUD PLATFORM
+    BLOCKCHAIN SERVICE (THE “SERVICE”) AND IN ACCORDANCE WITH THE AGREEMENT FOR THE SERVICE.
+    THIS SAMPLE CODE PROVIDED “AS IS”, WITHOUT ANY WARRANTY, ESCROW, TRAINING, MAINTENANCE, OR
+    SERVICE OBLIGATIONS WHATSOEVER ON THE PART OF SAP."
+  version: "1.0"
+  title: "readingAsset_devX"
+
+consumes:
+  - application/json
+
+parameters:
+
+  id:
+    name: id
+    in: path
+    description: ID of the Odometer Reading
+    required: true
+    type: string
+    maxLength: 64
+
+definitions:
+  odoReading:
+    type: object
+    properties:
+      vehicleID:
+        type: string
+      docType:
+        type: string
+      reading:
+        type: string
+      creationDate:
+        type: string
+
+paths:
+
+  /:
+    get:
+      operationId: readAllReadings
+      summary: Read all (existing) Odometer Readings
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+        500:
+          description: Failed
+
+    post:
+      operationId: addNewReading
+      summary: Adds a new Odometer Reading for a new vehicle
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: newReading
+        description: New Odometer Reading for new Vehicle
+        required: true
+        schema:
+          $ref: '#/definitions/odoReading'
+      responses:
+        200:
+          description: Reading Written
+        500:
+          description: Failed
+
+    put:
+      operationId: updateReading
+      summary: Updates existing vehicle with a new Odometer Reading
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: updateReading
+        description: New Odometer Reading for existing vehicle
+        required: true
+        schema:
+          $ref: '#/definitions/odoReading'
+      responses:
+        200:
+          description: Reading Written
+        500:
+          description: Failed
+
+    delete:
+      operationId: removeAllReadings
+      summary: Remove all (existing) Odometer Readings
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+        500:
+          description: Failed
+
+  /{id}:
+
+    get:
+      operationId: readReading
+      summary: Read (existing) Odometer Reading by Reading ID
+      parameters:
+      - $ref: '#/parameters/id'
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+        500:
+          description: Failed
